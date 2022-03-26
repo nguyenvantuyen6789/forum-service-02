@@ -5,10 +5,7 @@ import com.tuyennguyen.productservice.model.ProductDTO;
 import com.tuyennguyen.productservice.repository.ProductRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,6 +39,26 @@ public class ProductController {
         productRepo.save(product);
 
         return productDTO;
+    }
+
+    @PutMapping
+    public ProductDTO update(ProductDTO productDTO) {
+        Product product = modelMapper.map(productDTO, Product.class);
+        productRepo.save(product);
+
+        return productDTO;
+    }
+
+    @DeleteMapping("{productId}")
+    public ProductDTO delete(@PathVariable Long productId) {
+        Product product = productRepo.getById(productId);
+
+        if (product != null) {
+            productRepo.delete(product);
+            return modelMapper.map(product, ProductDTO.class);
+        }
+
+        return null;
     }
 
 }
