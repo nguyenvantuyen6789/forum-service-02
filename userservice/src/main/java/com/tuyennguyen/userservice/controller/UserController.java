@@ -5,9 +5,7 @@ import com.tuyennguyen.userservice.model.UserDTO;
 import com.tuyennguyen.userservice.repository.UserRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +30,24 @@ public class UserController {
         });
 
         return userDTOS;
+    }
+
+    @PostMapping
+    public UserDTO add(@RequestBody UserDTO userDTO) {
+        UserEntity userEntity = modelMapper.map(userDTO, UserEntity.class);
+        userRepo.save(userEntity);
+
+        return userDTO;
+    }
+
+    @DeleteMapping("{userId}")
+    public UserDTO delete(@PathVariable Long userId) {
+        UserEntity userEntity = userRepo.getById(userId);
+        if (userEntity != null) {
+            userRepo.delete(userEntity);
+        }
+
+        return null;
     }
 
 }
